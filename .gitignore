@@ -1,0 +1,40 @@
+# Composer
+/vendor/
+composer.lock
+
+# XAMPP / local environment
+*.log
+*.sql
+*.sqlite
+*.env
+
+# VS Code / IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Cache
+/cache/
+*.cache
+*.tmp
+
+# Uploads (kalau ga mau versioning gambar/file upload)
+uploads/
+public/uploads/
+admin/product/uploads/
+
+# PHPUnit
+.phpunit.result.cache
+
+# Node (jika pake npm buat frontend)
+node_modules/
+package-lock.json
+
+# Build
+/dist/
+build/
