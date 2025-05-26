@@ -38,3 +38,6 @@ package-lock.json
 # Build
 /dist/
 build/
+
+admin/product/uploads/
+!admin/product/uploads/.gitkeep
