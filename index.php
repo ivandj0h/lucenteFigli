@@ -1,7 +1,8 @@
-<?php include 'config/db.php'; ?>
-<?php include 'includes/header.php'; ?>
-
 <?php
+session_start();
+include 'config/db.php';
+include 'includes/header.php';
+
 $query = mysqli_query($conn, "SELECT * FROM products WHERE status = 1 ORDER BY created_at DESC");
 $produk = [];
 while ($row = mysqli_fetch_assoc($query)) {
@@ -15,7 +16,11 @@ while ($row = mysqli_fetch_assoc($query)) {
         <div class="container">
             <h1 class="display-4 fw-bold">Selamat Datang di Lucente Figli</h1>
             <p class="lead">Tampil elegan, penuh gaya. Temukan produk terbaik untukmu.</p>
-            <a href="#produk" class="btn btn-primary btn-lg">Belanja Sekarang</a>
+            <?php if (!isset($_SESSION['user'])): ?>
+                <a href="login.php" class="btn btn-primary btn-lg">Belanja Sekarang</a>
+            <?php else: ?>
+                <a href="#produk" class="btn btn-primary btn-lg">Belanja Sekarang</a>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -23,14 +28,12 @@ while ($row = mysqli_fetch_assoc($query)) {
     <section id="produk" class="py-5">
         <div class="container">
             <div class="row" id="product-list">
-                <?php
-                if (count($produk) == 0):
-                ?>
+                <?php if (count($produk) == 0): ?>
                     <div class="col text-center text-muted">
                         <p>Belum ada produk yang tersedia saat ini.</p>
                     </div>
+                <?php else: ?>
                     <?php
-                else:
                     $limit = min(6, count($produk));
                     for ($i = 0; $i < $limit; $i++):
                         $p = $produk[$i];
@@ -41,12 +44,16 @@ while ($row = mysqli_fetch_assoc($query)) {
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title"><?= $p['name']; ?></h5>
                                     <p class="card-text fw-bold text-danger">Rp <?= number_format($p['price'], 0, ',', '.'); ?></p>
-                                    <a href="cart.php?add=<?= $p['id']; ?>" class="btn btn-outline-primary mt-auto">Tambah ke Keranjang</a>
+                                    <?php if (!isset($_SESSION['user'])): ?>
+                                        <a href="login.php" class="btn btn-outline-primary mt-auto">Tambah ke Keranjang</a>
+                                    <?php else: ?>
+                                        <a href="cart.php?add=<?= $p['id']; ?>" class="btn btn-outline-primary mt-auto">Tambah ke Keranjang</a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
-                <?php endfor;
-                endif; ?>
+                    <?php endfor; ?>
+                <?php endif; ?>
             </div>
 
             <?php if (count($produk) > 6): ?>
@@ -56,7 +63,6 @@ while ($row = mysqli_fetch_assoc($query)) {
             <?php endif; ?>
         </div>
     </section>
-
 </main>
 
 <script>
